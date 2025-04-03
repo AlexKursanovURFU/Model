@@ -1,0 +1,19 @@
+# These requirements are for production.
+numpy
+matplotlib
+scipy
+tqdm
+h5py
+# These requirements are for development and testing only, not for production.
+loguru
+pytest
+pytest-cov
+coverage
+mypy
+isort
+mypy
+black
+flake8
+flake8-pyproject
+sphinx
+sphinx-rtd-theme
