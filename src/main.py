@@ -18,6 +18,8 @@ def main():
             )
         t, y = solver.solve()
 
+        
+
         logger.info("Программа завершена успешно")
 
     except Exception as e:
