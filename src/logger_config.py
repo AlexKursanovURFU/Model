@@ -1,27 +1,28 @@
-import logging
-import sys
+from loguru import logger
 from pathlib import Path
+import sys
 
-def setup_logger(name: str, log_file: str = None, level: int = logging.INFO):
+def setup_logger(log_file: str = None):
     """Настройка логгера с выводом в консоль и файл."""
-    logger = logging.getLogger(name)
-    logger.setLevel(level)
     
-    formatter = logging.Formatter(
-        "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-        datefmt="%Y-%m-%d %H:%M:%S"
-    )
+    # Удаляем стандартные обработчики
+    logger.remove()  
     
     # Вывод в консоль
-    console_handler = logging.StreamHandler(sys.stdout)
-    console_handler.setFormatter(formatter)
-    logger.addHandler(console_handler)
+    logger.add(
+        sys.stdout,
+        format="{time:YYYY-MM-DD HH:mm:ss} - {name} - {level} - {message}",
+        level="INFO"
+    )
     
     # Запись в файл (если указан)
     if log_file:
         Path(log_file).parent.mkdir(exist_ok=True, parents=True)
-        file_handler = logging.FileHandler(log_file)
-        file_handler.setFormatter(formatter)
-        logger.addHandler(file_handler)
+        logger.add(
+            log_file,
+            format="{time:YYYY-MM-DD HH:mm:ss} - {name} - {level} - {message}",
+            level="INFO",
+            rotation="10 MB"  # Автоматическая ротация логов при достижении 10 МБ
+        )
     
     return logger

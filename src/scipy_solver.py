@@ -20,7 +20,7 @@ class ScipySolver:
                 args=(self.args,),
                 **self.kwargs
             )
-            self.logger.info(f"Решение завершено. Шагов: {len(solution.t)}")
+            self.logger.success(f"Решение завершено. Шагов: {len(solution.t)}")
             return solution.t, solution.y
         except Exception as e:
             self.logger.error(f"Ошибка: {str(e)}", exc_info=True)

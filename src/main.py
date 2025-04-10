@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 def main():
     # Настройка логирования
-    logger = setup_logger("main", log_file="logs/solver.log")
+    logger = setup_logger(log_file = "logs/solver.log")
     
     try:
         logger.info("Запуск программы...")
