@@ -4,6 +4,7 @@ matplotlib
 scipy
 tqdm
 h5py
+numba
 # These requirements are for development and testing only, not for production.
 loguru
 pytest

@@ -3,6 +3,7 @@ from solvers.scipy_solver import ScipySolver
 import model.model as comp_model
 import matplotlib.pyplot as plt
 
+
 def main():
     # Настройка логирования
     logger = setup_logger("main", log_file="logs/solver.log")
@@ -29,7 +30,7 @@ def main():
         plt.plot(voi,states[0,:])
         plt.savefig('plot.png')
 
-        logger.info("Программа завершена успешно")
+        logger.info("Программа завершена успешна")
 
     except Exception as e:
         logger.critical(f"Критическая ошибка: {e}", exc_info=True)

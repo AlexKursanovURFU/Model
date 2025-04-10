@@ -1,5 +1,4 @@
 from scipy.integrate import solve_ivp
-import logging
 
 class ScipySolver:
     def __init__(self, model, t_span, y0, logger, args, **kwargs):
@@ -13,7 +12,7 @@ class ScipySolver:
 
     def solve(self):
         try:
-            self.logger.debug("Начало решения ОДУ...")
+            self.logger.info("Начало решения ОДУ...")
             solution = solve_ivp(
                 fun=self.model,
                 t_span=self.t_span,

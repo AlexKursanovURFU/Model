@@ -1,9 +1,10 @@
+import numpy as np
+
 # Size of variable arrays:
 sizeAlgebraic = 81
 sizeStates = 33
 sizeConstants = 60
 
-import numpy as np
 
 def createLegends():
     legend_states = [""] * sizeStates
