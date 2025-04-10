@@ -1,6 +1,6 @@
-from utils.logger_config import setup_logger
-from solvers.scipy_solver import ScipySolver
-import model.model as comp_model
+from logger_config import setup_logger
+from scipy_solver import ScipySolver
+import model as comp_model
 import matplotlib.pyplot as plt
 
 
