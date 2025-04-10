@@ -2,6 +2,9 @@ from logger_config import setup_logger
 from scipy_solver import ScipySolver
 import model as comp_model
 import matplotlib.pyplot as plt
+import numpy as np
+
+from protocol_1 import exp_1
 
 
 def main():
@@ -21,6 +24,7 @@ def main():
             t_span=[0, 1],
             y0=init_states,
             args=constants)
+        
         voi, states = solver.solve()
 
         # Расчет алгебраических переменных
@@ -35,5 +39,11 @@ def main():
     except Exception as e:
         logger.critical(f"Критическая ошибка: {e}", exc_info=True)
 
+
 if __name__ == "__main__":
-    main()
+    # main()
+
+    number_cell = [0, 1]
+    time = [0, 1]
+
+    exp_1(t_span=time, number_macrofags=number_cell)
