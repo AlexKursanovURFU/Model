@@ -138,11 +138,11 @@ def create_legends():
         "x3": "x3 in component sodium_calcium_exchange_current (dimensionless)",
         "x4": "x4 in component sodium_calcium_exchange_current (dimensionless)",
         "k41": "k41 in component sodium_calcium_exchange_current (dimensionless)",
-        #"k34": "k34 in component sodium_calcium_exchange_current (dimensionless)",
+        "k34": "k34 in component sodium_calcium_exchange_current (dimensionless)",
         "k23": "k23 in component sodium_calcium_exchange_current (dimensionless)",
         "k21": "k21 in component sodium_calcium_exchange_current (dimensionless)",
         "k32": "k32 in component sodium_calcium_exchange_current (dimensionless)",
-        #"k43": "k43 in component sodium_calcium_exchange_current (dimensionless)",
+        "k43": "k43 in component sodium_calcium_exchange_current (dimensionless)",
         "k12": "k12 in component sodium_calcium_exchange_current (dimensionless)",
         "k14": "k14 in component sodium_calcium_exchange_current (dimensionless)",
         "do": "do in component sodium_calcium_exchange_current (dimensionless)",
@@ -201,8 +201,8 @@ def create_legends():
 
 def init_consts():
     """
-    Инициализация констант и состояний модели.
-    Возвращает два словаря: states (состояния) и constants (константы).
+    Инициализация констант и начальных значений фазовых переменных модели.
+    Возвращает два словаря: states (фазовые переменные) и constants (константы).
     """
     # Инициализация констант
     constants = {
