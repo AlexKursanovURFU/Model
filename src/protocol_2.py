@@ -25,7 +25,8 @@ def protocol_2():
         logger.info("Инициализация констант и начальных значений...")
         init_states, constants = comp_model.initConsts()
 
-        gaps = [0.1, 0.5, 1, 3]
+        gaps = [0.1]
+        
 
         V = {}
         time = {}
@@ -67,7 +68,7 @@ def protocol_2():
         plt.legend()
         plt.savefig('plot1.png')
 
-        logger.info("Программа завершена успешна")
+        logger.info("Программа завершена успешно")
 
     except Exception as e:
         logger.critical(f"Критическая ошибка: {e}", exc_info=True)
