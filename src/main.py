@@ -3,6 +3,7 @@ from scipy_solver import ScipySolver
 import model as comp_model
 import matplotlib.pyplot as plt
 import numpy as np
+from protocol_2 import protocol_2
 
 from protocol_1 import exp_1
 
@@ -43,7 +44,9 @@ def main():
 if __name__ == "__main__":
     # main()
 
-    number_cell = [0, 1]
-    time = [0, 1]
+    #number_cell = [0, 1]
+    #time = [0, 1]
 
-    exp_1(t_span=time, number_macrofags=number_cell)
+    #exp_1(t_span=time, number_macrofags=number_cell)
+
+    protocol_2()
