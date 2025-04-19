@@ -64,13 +64,17 @@ def protocol_2():
             time[gap] = t_number
             V_mak[gap] = V_mac_number
 
+        logger.info("Рачет характеристик ПД...")
         for gap in gaps:
+            V_max_number = {}
+            V_min_number = {}
+            characteristics_number = {}
             for number_macrofag in number_macrofags:
 
                 maximum_V_index = argrelmax(V[gap][number_macrofag])
                 maximum_V = V[gap][number_macrofag][maximum_V_index]
                 maximum_V_time = time[gap][number_macrofag][maximum_V_index]
-                V_max[gap] ={number_macrofag:{'index': maximum_V_index, 'maximum': maximum_V, 'time': maximum_V_time}}
+                V_max_number[number_macrofag] = {'index': maximum_V_index, 'maximum': maximum_V, 'time': maximum_V_time}
 
                 print('Индексы максимумов V', maximum_V_index)
                 print('Максимумы V', maximum_V)
@@ -79,19 +83,24 @@ def protocol_2():
                 minimum_V_index = argrelmin(V[gap][number_macrofag])
                 minimum_V = V[gap][number_macrofag][minimum_V_index]
                 minimum_V_time = time[gap][number_macrofag][minimum_V_index]
-                V_min[gap] = {number_macrofag:{'index': minimum_V_index, 'minimum': minimum_V, 'time': minimum_V_time}}
+                V_min_number[number_macrofag] = {'index': minimum_V_index, 'minimum': minimum_V, 'time': minimum_V_time}
 
                 print('Индексы минимумов V', minimum_V_index)
                 print('Минимумы V', minimum_V)
                 print('Время локальных минимумов', minimum_V_time)
 
-                characteristics[gap] = {number_macrofag:{'ampl': maximum_V[-1]-minimum_V[-1], 'period': maximum_V_time[-1]-maximum_V_time[-2]}}
-                print('Амплитуда потенциала действия',characteristics[gap][number_macrofag]['ampl'], 'Период',characteristics[gap][number_macrofag]['period'])
+                characteristics_number[number_macrofag] = {'ampl': maximum_V[-1]-minimum_V[-1], 'period': maximum_V_time[-1]-maximum_V_time[-2]}
+                print('Амплитуда потенциала действия',characteristics_number[number_macrofag]['ampl'], 'Период', characteristics_number[number_macrofag]['period'])
 
+            V_max[gap] = V_max_number
+            V_min[gap] = V_min_number
+            characteristics[gap] = characteristics_number
+        
+        logger.info("Пострение графиков")
         fig, ax = plt.subplots()        
         for gap in gaps:
             for number_macrofag in number_macrofags:
-                ax.plot(time[gap][number_macrofag],V[gap][number_macrofag], label = f'G_gap: {gap}, nu: {number_macrofag} Pr: {characteristics[gap][number_macrofag]['period']:.2f} s.')
+                ax.plot(time[gap][number_macrofag],V[gap][number_macrofag], label = f'G_gap: {gap}, nu: {number_macrofag}, nu: {number_macrofag}, Pr: {characteristics[gap][number_macrofag]['period']:.2f} s.')
                 ax.scatter(V_max[gap][number_macrofag]['time'],V_max[gap][number_macrofag]['maximum'])
                 ax.scatter(V_min[gap][number_macrofag]['time'],V_min[gap][number_macrofag]['minimum'])
                 ax.plot([V_max[gap][number_macrofag]['time'][-1], V_max[gap][number_macrofag]['time'][-1]],
@@ -105,7 +114,7 @@ def protocol_2():
 
         fig, ax = plt.subplots()
         for gap in gaps:
-            ax.plot(time[gap],V_mak[gap], label = f'G_gap: {gap}')
+            ax.plot(time[gap][number_macrofag],V_mak[gap][number_macrofag], label = f'G_gap: {gap}')
 
         ax.set_xlabel('Время, с')
         ax.set_ylabel('Потенциал макрофага, мВ')
