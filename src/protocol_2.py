@@ -13,6 +13,7 @@ from scipy.signal import argrelmax, argrelmin
 import model as comp_model
 import matplotlib.pyplot as plt
 import numpy as np
+import h5py
 
 
 def solve_protocol(logger, gaps, number_macrofags, t_span):
@@ -106,7 +107,9 @@ def plot_AP(logger, gaps, number_macrofags, V, time, V_mak, V_max, V_min, charac
         logger.info("Пострение графиков")
         fig, ax = plt.subplots()        
         for gap in gaps:
+            gap = str(gap)
             for number_macrofag in number_macrofags:
+                number_macrofag = str(number_macrofag)
                 ax.plot(time[gap][number_macrofag],V[gap][number_macrofag], label = f'G_gap: {gap}, nu: {number_macrofag}, nu: {number_macrofag}, Pr: {characteristics[gap][number_macrofag]['period']:.2f} s.')
                 ax.scatter(V_max[gap][number_macrofag]['time'],V_max[gap][number_macrofag]['maximum'])
                 ax.scatter(V_min[gap][number_macrofag]['time'],V_min[gap][number_macrofag]['minimum'])
@@ -121,6 +124,7 @@ def plot_AP(logger, gaps, number_macrofags, V, time, V_mak, V_max, V_min, charac
 
         fig, ax = plt.subplots()
         for gap in gaps:
+            gap = str(gap)
             ax.plot(time[gap][number_macrofag],V_mak[gap][number_macrofag], label = f'G_gap: {gap}')
 
         ax.set_xlabel('Время, с')
@@ -131,21 +135,69 @@ def plot_AP(logger, gaps, number_macrofags, V, time, V_mak, V_max, V_min, charac
     except Exception as e:
         logger.critical(f"Критическая ошибка: {e}", exc_info=True)
 
+def saveh5(dict_file: dict, target_path: str) -> None:
+    with h5py.File(target_path, "w") as h5file:
+        writeh5(dict_file, h5file)
+
+def writeh5(dict_file: dict, h5file)-> None:
+    for key in dict_file.keys():
+        if isinstance(dict_file[key], dict):
+            h5file.create_group(str(key))
+            current_group = h5file[str(key)]
+            writeh5(dict_file[key], current_group)
+        else:
+            h5file[str(key)] = dict_file[key]
+
+def loadh5(path: str):
+    with h5py.File(path, 'r') as h5file:
+        return readh5(h5file)
+
+def readh5(h5file):
+    dict_file = {}
+
+    for key in h5file.keys():
+        if type(h5file[key]) is h5py._hl.group.Group:
+            dict_file[key] = readh5(h5file[key])
+        else:
+            dict_file[key] = h5file[key][...]
+
+    return dict_file
+
 def main_protocol(logger):
     try:
         logger.info("Запуск прокотола...")
         # Списки с значениями gap и number_macrofag которые мы хотим посчитать
         
         gaps = [0.1, 1.0]
-        number_macrofags = [1]
+        number_macrofags = [0, 1]
         # Списки с значениями time [time_min, time_max]
         t_span = [0, 1]
 
         logger.info(f"Значения gaps: {gaps}")
         logger.info(f"Значения number_macrofags: {number_macrofags}")
 
-        V, time, V_mak = solve_protocol(logger, gaps, number_macrofags, t_span)
-        V_max, V_min, characteristics = AP_conf(logger, V, time, V_mak, gaps, number_macrofags)
+        #V, time, V_mak = solve_protocol(logger, gaps, number_macrofags, t_span)
+        #V_max, V_min, characteristics = AP_conf(logger, V, time, V_mak, gaps, number_macrofags)
+
+        #resalt = {'time': time,
+        #          'V': V,
+        #          'V_mak': V_mak,
+        #          'V_max': V_max,
+        #          'V_min': V_min,
+        #          'characteristics': characteristics}
+        
+
+        #saveh5(resalt, 'resalt.h5')
+
+        load_resalt = loadh5('resalt.h5')
+
+        time = load_resalt['time']
+        V =  load_resalt['V']      
+        V_mak = load_resalt['V_mak']
+        V_max = load_resalt['V_max']
+        V_min = load_resalt['V_min']  
+        characteristics =  load_resalt['characteristics']
+
         plot_AP(logger, gaps, number_macrofags, V, time, V_mak, V_max, V_min, characteristics)
 
         logger.info("Программа завершена успешно") 
