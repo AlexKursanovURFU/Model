@@ -3,7 +3,9 @@ from scipy_solver import ScipySolver
 import model as comp_model
 import matplotlib.pyplot as plt
 import numpy as np
-
+from Plot_graph_1 import plot_graph_1
+from plot_graph_plot_save import plot_graph
+from plot_graph_plot_save import save_plot
 
 
 def exp_1(t_span, number_macrofags, g_gap = 0.1):
@@ -41,14 +43,26 @@ def exp_1(t_span, number_macrofags, g_gap = 0.1):
             time[number_macrofag] = voi
             V_macro[number_macrofag] = states[29,:]
 
+
+
         for number_macrofag in number_macrofags:
-            plt.plot(time[number_macrofag],V[number_macrofag], label = f'Число макрофагов: {number_macrofag}')
-
-        plt.xlabel('Время, с')
-        plt.ylabel('Потенциал действия, мВ')
-        plt.legend()
-        plt.savefig('plot.png')
-
+            #plt.plot(time[number_macrofag],V[number_macrofag], label = f'Число макрофагов: {number_macrofag}')
+            plot_graph(
+                x_data=time[number_macrofag],
+                y_data_list=[V[number_macrofag]],
+                title="____",
+                x_label="x", 
+                y_label="y",
+                colors=[None],
+                linestyles=[None],
+                markers=[None, "o", None],
+                labels=[f'Число макрофагов: {number_macrofag}'],
+                linewidth=2,
+                show=False,
+                figsize=(10,8)
+            )
+        save_plot("plot4.png")
+        plt.close()
         # Расчет до 10 с.
         # Поварьировать g_gap = [0.1, 0.5, 1]
 

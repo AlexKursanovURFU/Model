@@ -1,8 +1,12 @@
 from logger_config import setup_logger
 from scipy_solver import ScipySolver
+from plot_graph_plot_save import plot_graph
+from plot_graph_plot_save import save_plot
 import model as comp_model
 import matplotlib.pyplot as plt
 import numpy as np
+from Plot_graph_1 import plot_graph_1
+
 
 from protocol_1 import exp_1
 
@@ -31,8 +35,8 @@ def main():
         logger.info("Расчет алгебраических переменных...")
         algebraic = comp_model.computeAlgebraic(constants, states, voi)
 
-        plt.plot(voi,states[0,:])
-        plt.savefig('plot.png')
+        #plt.plot(voi,states[0,:])
+        #plt.savefig('plot.png')
 
         logger.info("Программа завершена успешна")
 
@@ -47,3 +51,4 @@ if __name__ == "__main__":
     time = [0, 1]
 
     exp_1(t_span=time, number_macrofags=number_cell)
+    
