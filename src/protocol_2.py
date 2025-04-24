@@ -8,34 +8,24 @@
 # Поварьировать number_macrofag = [1, 2, 3]
 
 
-from logger_config import setup_logger
 from scipy_solver import ScipySolver
 from scipy.signal import argrelmax, argrelmin
 import model as comp_model
 import matplotlib.pyplot as plt
 import numpy as np
 
-def protocol_2():
-    # Настройка логирования
-    logger = setup_logger(log_file = "logs/solver.log")
-    
+
+def solve_protocol(logger, gaps, number_macrofags, t_span):
     try:
-        logger.info("Запуск прокотола 2...")
+        logger.info("Запуск расчетов...")
 
 
         logger.info("Инициализация констант и начальных значений...")
         init_states, constants = comp_model.initConsts()
 
-        gaps = [0.1]
-        number_macrofags = [1, 2]
-        
-
         V = {}
         time = {}
         V_mak = {}
-        V_max = {}
-        V_min = {}
-        characteristics = {}
 
         for gap in gaps:
             V_number = {}
@@ -51,7 +41,7 @@ def protocol_2():
                 solver = ScipySolver(
                     logger = logger,    
                     model=comp_model.computeRates,
-                    t_span=[0, 1],
+                    t_span=t_span,
                     y0=init_states,
                     args=constants)
                 
@@ -64,7 +54,17 @@ def protocol_2():
             time[gap] = t_number
             V_mak[gap] = V_mac_number
 
+        return V, time, V_mak
+    
+    except Exception as e:
+        logger.critical(f"Критическая ошибка: {e}", exc_info=True)
+
+def AP_conf(logger, V, time, V_mak, gaps, number_macrofags):
+    try:
         logger.info("Рачет характеристик ПД...")
+        V_max = {}
+        V_min = {}
+        characteristics = {}
         for gap in gaps:
             V_max_number = {}
             V_min_number = {}
@@ -95,7 +95,14 @@ def protocol_2():
             V_max[gap] = V_max_number
             V_min[gap] = V_min_number
             characteristics[gap] = characteristics_number
-        
+
+        return V_max, V_min, characteristics
+
+    except Exception as e:
+        logger.critical(f"Критическая ошибка: {e}", exc_info=True)
+
+def plot_AP(logger, gaps, number_macrofags, V, time, V_mak, V_max, V_min, characteristics):
+    try:
         logger.info("Пострение графиков")
         fig, ax = plt.subplots()        
         for gap in gaps:
@@ -121,8 +128,27 @@ def protocol_2():
         ax.legend()
         plt.savefig('plot1.png')
         plt.show()
+    except Exception as e:
+        logger.critical(f"Критическая ошибка: {e}", exc_info=True)
 
-        logger.info("Программа завершена успешно")
+def main_protocol(logger):
+    try:
+        logger.info("Запуск прокотола...")
+        # Списки с значениями gap и number_macrofag которые мы хотим посчитать
+        
+        gaps = [0.1, 1.0]
+        number_macrofags = [1]
+        # Списки с значениями time [time_min, time_max]
+        t_span = [0, 1]
+
+        logger.info(f"Значения gaps: {gaps}")
+        logger.info(f"Значения number_macrofags: {number_macrofags}")
+
+        V, time, V_mak = solve_protocol(logger, gaps, number_macrofags, t_span)
+        V_max, V_min, characteristics = AP_conf(logger, V, time, V_mak, gaps, number_macrofags)
+        plot_AP(logger, gaps, number_macrofags, V, time, V_mak, V_max, V_min, characteristics)
+
+        logger.info("Программа завершена успешно") 
 
     except Exception as e:
         logger.critical(f"Критическая ошибка: {e}", exc_info=True)
